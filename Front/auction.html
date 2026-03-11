@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enchère — Produit</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<script src="js/layout.js"></script>
+<script>renderNavbar('');</script>
+
+<div class="page-hero">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="background:none;padding:0;margin:0;">
+                <li class="breadcrumb-item">
+                    <a href="articles.html" style="color:rgba(255,255,255,.7);text-decoration:none;">Enchères</a>
+                </li>
+                <li class="breadcrumb-item active" id="breadcrumbProduct" style="color:white;">Produit</li>
+            </ol>
+        </nav>
+        <div class="d-flex align-items-center gap-3 mt-2">
+            <h1 class="mb-0" id="productTitle">Produit</h1>
+            <span style="background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid rgba(239,68,68,.3);padding:4px 12px;border-radius:50px;font-size:.8rem;font-weight:700;display:flex;align-items:center;gap:6px;">
+                <span style="width:8px;height:8px;background:#ef4444;border-radius:50%;animation:pulse 1.5s infinite;"></span>EN DIRECT
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-5">
+
+        <div class="col-lg-5">
+            <div id="productImageBlock" style="height:360px;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-lg);background:#f8f8f8;">
+                <img id="productImage" src="" alt="Produit" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+
+            <div class="card-omnes p-4 mt-3">
+                <h6 style="font-weight:700;text-transform:uppercase;font-size:.8rem;letter-spacing:.4px;color:var(--text-muted);margin-bottom:8px;">Description</h6>
+                <p id="productDescription" style="color:var(--text-muted);font-size:.875rem;line-height:1.7;margin:0;">
+                    Description du produit
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:var(--radius-lg);padding:28px;color:white;margin-bottom:24px;">
+                <div class="row g-3 text-center">
+                    <div class="col-4">
+                        <div style="opacity:.7;font-size:.72rem;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Prix départ</div>
+                        <div id="startPrice" style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;">0 €</div>
+                    </div>
+
+                    <div class="col-4" style="border-left:1px solid rgba(255,255,255,.2);border-right:1px solid rgba(255,255,255,.2);">
+                        <div style="opacity:.7;font-size:.72rem;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Meilleure offre</div>
+                        <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--accent);" id="bestOffer">0 €</div>
+                    </div>
+
+                    <div class="col-4">
+                        <div style="opacity:.7;font-size:.72rem;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Enchérisseurs</div>
+                        <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;" id="bidCount">0</div>
+                    </div>
+                </div>
+
+                <hr style="border-color:rgba(255,255,255,.2);margin:16px 0;">
+
+                <div class="text-center">
+                    <div style="font-size:.75rem;opacity:.7;margin-bottom:6px;">FIN DE L'ENCHÈRE DANS</div>
+                    <div id="countdown" style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;letter-spacing:2px;">--:--:--</div>
+                    <div id="endDateText" style="font-size:.75rem;opacity:.7;margin-top:4px;">Date fin</div>
+                </div>
+            </div>
+
+            <div class="card-omnes p-3 mb-4" style="border-left:4px solid var(--primary);">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div style="font-size:.8rem;color:var(--text-muted);">Mon offre maximum</div>
+                        <div id="myMaxOffer" class="price-display" style="font-size:1.1rem;">0 €</div>
+                    </div>
+                    <div>
+                        <div style="font-size:.8rem;color:var(--text-muted);">Offre effective</div>
+                        <div id="myEffectiveOffer" class="price-display" style="font-size:1.1rem;">0 €</div>
+                    </div>
+                    <span id="myStatusBadge" style="background:var(--primary-pale);color:var(--primary-dark);padding:4px 14px;border-radius:50px;font-size:.8rem;font-weight:700;">En tête</span>
+                </div>
+            </div>
+
+            <div class="card-omnes p-4 mb-4">
+                <h6 style="font-weight:700;margin-bottom:6px;">Augmenter mon enchère</h6>
+                <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:16px;">
+                    Entrez votre prix maximum. Le système enchérira automatiquement pour vous au minimum nécessaire.
+                </p>
+                <div class="input-group mb-2">
+                    <span class="input-group-text" style="background:white;border:1.5px solid var(--border);">€ Max</span>
+                    <input type="number" class="form-control form-control-omnes" placeholder="Ex: 450" id="bidInput" style="border-left:none;">
+                    <button onclick="placeBid()" class="btn btn-accent" style="border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-weight:700;">
+                        <i class="bi bi-trophy me-1"></i>Enchérir
+                    </button>
+                </div>
+                <small style="color:var(--text-muted);font-size:.75rem;">
+                    <i class="bi bi-info-circle me-1"></i>Toute enchère placée est un engagement d'achat si vous remportez l'objet.
+                </small>
+            </div>
+
+            <div class="card-omnes p-4">
+                <h6 style="font-weight:700;margin-bottom:16px;">
+                    <i class="bi bi-list-ol me-2" style="color:var(--primary);"></i>Classement des offres
+                </h6>
+                <div id="bidList"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const auctionProducts = {
+    bague: {
+        nom: "Bague or 18 carats",
+        categorie: "Bijoux & Montres",
+        image: "images/bage_or.jpg",
+        description: "Magnifique bague en or 18 carats ornée d'un saphir naturel de 0,8 ct. Poinçon garantissant la pureté. Excellent état, achetée chez un bijoutier en 2018.",
+        prixDepart: 200,
+        meilleureOffre: 320,
+        encherisseurs: 7,
+        monOffreMax: 380,
+        offreEffective: 320,
+        statut: "En tête",
+        finTexte: "13/03/2026 à 20:00",
+        finDate: "2026-03-13T20:00:00",
+        bids: [
+            {name:'Vous', amount:320, isMe:true},
+            {name:'Enchérisseur #4', amount:310, isMe:false},
+            {name:'Enchérisseur #2', amount:290, isMe:false},
+            {name:'Enchérisseur #6', amount:270, isMe:false},
+            {name:'Enchérisseur #1', amount:250, isMe:false},
+            {name:'Enchérisseur #5', amount:230, isMe:false},
+            {name:'Enchérisseur #3', amount:200, isMe:false}
+        ]
+    },
+
+    tableau: {
+        nom: "Tableau aquarelle original",
+        categorie: "Art & Collections",
+        image: "images/tableau_aquarelle.jpg",
+        description: "Tableau aquarelle original aux tons doux, idéal pour la décoration intérieure. Très bon état, œuvre soigneusement conservée.",
+        prixDepart: 60,
+        meilleureOffre: 85,
+        encherisseurs: 5,
+        monOffreMax: 100,
+        offreEffective: 85,
+        statut: "En tête",
+        finTexte: "12/03/2026 à 18:30",
+        finDate: "2026-03-12T18:30:00",
+        bids: [
+            {name:'Vous', amount:85, isMe:true},
+            {name:'Enchérisseur #1', amount:80, isMe:false},
+            {name:'Enchérisseur #3', amount:75, isMe:false},
+            {name:'Enchérisseur #2', amount:70, isMe:false},
+            {name:'Enchérisseur #5', amount:65, isMe:false}
+        ]
+    },
+
+    montre: {
+        nom: "Montre Tissot vintage",
+        categorie: "Bijoux & Montres",
+        image: "images/montre_tissot.jpg",
+        description: "Montre Tissot vintage en bon état de fonctionnement, bracelet d'origine, style classique et élégant. Idéale pour collectionneur ou usage quotidien.",
+        prixDepart: 150,
+        meilleureOffre: 210,
+        encherisseurs: 6,
+        monOffreMax: 240,
+        offreEffective: 210,
+        statut: "En tête",
+        finTexte: "14/03/2026 à 16:00",
+        finDate: "2026-03-14T16:00:00",
+        bids: [
+            {name:'Vous', amount:210, isMe:true},
+            {name:'Enchérisseur #2', amount:205, isMe:false},
+            {name:'Enchérisseur #6', amount:198, isMe:false},
+            {name:'Enchérisseur #1', amount:190, isMe:false},
+            {name:'Enchérisseur #4', amount:175, isMe:false},
+            {name:'Enchérisseur #3', amount:160, isMe:false}
+        ]
+    },
+
+    appareil: {
+        nom: "Appareil photo argentique",
+        categorie: "Électronique",
+        image: "images/appreil_photo_nikon.jpg",
+        description: "Appareil photo argentique en bon état, idéal pour les amateurs de photo vintage. Fonctionnement vérifié, avec objectif inclus.",
+        prixDepart: 100,
+        meilleureOffre: 145,
+        encherisseurs: 4,
+        monOffreMax: 170,
+        offreEffective: 145,
+        statut: "En tête",
+        finTexte: "15/03/2026 à 11:00",
+        finDate: "2026-03-15T11:00:00",
+        bids: [
+            {name:'Vous', amount:145, isMe:true},
+            {name:'Enchérisseur #2', amount:140, isMe:false},
+            {name:'Enchérisseur #1', amount:130, isMe:false},
+            {name:'Enchérisseur #4', amount:120, isMe:false}
+        ]
+    }
+};
+
+const params = new URLSearchParams(window.location.search);
+const productKey = params.get("product");
+const product = auctionProducts[productKey] || auctionProducts.bague;
+
+document.title = "Enchère — " + product.nom;
+document.getElementById("breadcrumbProduct").textContent = product.nom;
+document.getElementById("productTitle").textContent = product.nom;
+document.getElementById("productDescription").textContent = product.description;
+document.getElementById("startPrice").textContent = product.prixDepart + " €";
+document.getElementById("bestOffer").textContent = product.meilleureOffre + " €";
+document.getElementById("bidCount").textContent = product.encherisseurs;
+document.getElementById("endDateText").textContent = product.finTexte;
+document.getElementById("myMaxOffer").textContent = product.monOffreMax + " €";
+document.getElementById("myEffectiveOffer").textContent = product.offreEffective + " €";
+document.getElementById("myStatusBadge").textContent = product.statut;
+document.getElementById("productImage").src = product.image;
+document.getElementById("productImage").alt = product.nom;
+
+const bidList = document.getElementById("bidList");
+
+function renderBidList() {
+    bidList.innerHTML = "";
+
+    product.bids.forEach((b, i) => {
+        bidList.innerHTML += `
+        <div class="d-flex justify-content-between align-items-center py-2 ${i < product.bids.length - 1 ? 'border-bottom' : ''}" style="border-color:var(--border)!important;">
+            <div class="d-flex align-items-center gap-2">
+                ${i === 0
+                    ? '<i class="bi bi-trophy-fill" style="color:var(--accent);"></i>'
+                    : `<span style="width:20px;text-align:center;color:var(--text-muted);font-size:.8rem;">#${i + 1}</span>`
+                }
+                <span style="font-size:.875rem;${b.isMe ? 'font-weight:700;color:var(--primary);' : ''}">${b.name}</span>
+            </div>
+            <strong class="price-display" style="font-size:.95rem;">${b.amount} €</strong>
+        </div>`;
+    });
+}
+
+renderBidList();
+
+const endDate = new Date(product.finDate).getTime();
+
+function tick() {
+    const diff = endDate - Date.now();
+
+    if (diff <= 0) {
+        document.getElementById('countdown').textContent = 'Terminée';
+        return;
+    }
+
+    const totalHours = Math.floor(diff / 3600000);
+    const minutes = Math.floor((diff % 3600000) / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
+
+    document.getElementById('countdown').textContent =
+        `${String(totalHours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+}
+
+tick();
+setInterval(tick, 1000);
+
+function placeBid() {
+    const input = document.getElementById('bidInput');
+    const value = parseInt(input.value);
+
+    if (!value || value <= product.meilleureOffre) {
+        alert('Votre offre doit être supérieure à ' + product.meilleureOffre + ' €');
+        return;
+    }
+
+    product.meilleureOffre = value;
+    product.encherisseurs += 1;
+    product.monOffreMax = value;
+    product.offreEffective = value;
+    product.statut = "En tête";
+
+    document.getElementById('bestOffer').textContent = value + ' €';
+    document.getElementById('bidCount').textContent = product.encherisseurs;
+    document.getElementById('myMaxOffer').textContent = product.monOffreMax + ' €';
+    document.getElementById('myEffectiveOffer').textContent = product.offreEffective + ' €';
+    document.getElementById('myStatusBadge').textContent = product.statut;
+
+    product.bids.forEach(b => b.isMe = false);
+    product.bids.unshift({
+        name: 'Vous',
+        amount: value,
+        isMe: true
+    });
+
+    renderBidList();
+    input.value = '';
+    alert('Enchère de ' + value + ' € placée avec succès !');
+}
+</script>
+
+<script>renderFooter();</script>
+</body>
+</html>

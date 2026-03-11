@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- 
+         articles.html — Page de catalogue / browsing
+         Liste tous les articles avec filtres et recherche.
+     -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tout Parcourir — Omnes MarketPlace</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Styles globaux du projet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar partagée — actif : 'articles' -->
+<script src="js/layout.js"></script>
+<script>renderNavbar('articles');</script>
+
+<!-- 
+     BANDEAU DE PAGE
+     Titre de la page + fil d'Ariane (breadcrumb).
+ -->
+<div class="page-hero">
+    <div class="container">
+        <!-- Fil d'Ariane -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="background:none;padding:0;margin:0;">
+                <li class="breadcrumb-item"><a href="index.html" style="color:rgba(255,255,255,.7);text-decoration:none;">Accueil</a></li>
+                <li class="breadcrumb-item active" style="color:white;">Tout Parcourir</li>
+            </ol>
+        </nav>
+        <h1 class="mt-2 mb-1">Tout Parcourir</h1>
+        <p style="color:rgba(255,255,255,.8);margin:0;">24 articles disponibles</p>
+    </div>
+</div>
+
+<!-- 
+     CONTENU PRINCIPAL
+     Sidebar de filtres (gauche) + Grille articles (droite)
+ -->
+<div class="container py-5">
+    <div class="row g-4">
+
+        <!--  SIDEBAR FILTRES  -->
+        <div class="col-lg-3">
+            <div class="filter-sidebar">
+                <h5 style="font-size:1.05rem;margin-bottom:20px;">
+                    <i class="bi bi-funnel me-2" style="color:var(--primary);"></i>Filtres
+                </h5>
+
+                <!-- Filtre : Mode d'achat -->
+                <div class="mb-4">
+                    <p style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px;">Mode d'achat</p>
+                    <label class="d-flex align-items-center gap-2 mb-2" style="cursor:pointer;font-size:.875rem;">
+                        <input type="radio" name="mode" checked style="accent-color:var(--primary);"> Tous les modes
+                    </label>
+                    <label class="d-flex align-items-center gap-2 mb-2" style="cursor:pointer;font-size:.875rem;">
+                        <input type="radio" name="mode" style="accent-color:var(--primary);">  Achat immédiat
+                    </label>
+                    <label class="d-flex align-items-center gap-2 mb-2" style="cursor:pointer;font-size:.875rem;">
+                        <input type="radio" name="mode" style="accent-color:var(--primary);">  Négociation
+                    </label>
+                    <label class="d-flex align-items-center gap-2 mb-2" style="cursor:pointer;font-size:.875rem;">
+                        <input type="radio" name="mode" style="accent-color:var(--primary);">  Enchère
+                    </label>
+                </div>
+
+                <!-- Filtre : Type d'article -->
+                <div class="mb-4">
+                    <p style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px;">Type d'article</p>
+                    <label class="d-flex align-items-center gap-2 mb-2" style="cursor:pointer;font-size:.875rem;">
+                        <input type="radio" name="type" checked style="accent-color:var(--primary);"> Tous
+                    </label>
+                    <label class="d-flex align-items-center gap-2 mb-2" style="cursor:pointer;font-size:.875rem;">
+                        <input type="radio" name="type" style="accent-color:var(--primary);">  Articles rares
+                    </label>
+                    <label class="d-flex align-items-center gap-2 mb-2" style="cursor:pointer;font-size:.875rem;">
+                        <input type="radio" name="type" style="accent-color:var(--primary);">  Haute gamme
+                    </label>
+                    <label class="d-flex align-items-center gap-2 mb-2" style="cursor:pointer;font-size:.875rem;">
+                        <input type="radio" name="type" style="accent-color:var(--primary);">  Réguliers
+                    </label>
+                </div>
+
+                <!-- Filtre : Catégorie -->
+                <div class="mb-4">
+                    <p style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px;">Catégorie</p>
+                    <select class="form-select-omnes" style="width:100%;">
+                        <option>Toutes les catégories</option>
+                        <option>Bijoux &amp; Montres</option>
+                        <option>Art &amp; Collections</option>
+                        <option>Vêtements Luxe</option>
+                        <option>Électronique</option>
+                        <option>Livres &amp; Papeterie</option>
+                        <option>Mobilier Antique</option>
+                        <option>Accessoires Mode</option>
+                        <option>Matériel Scolaire</option>
+                    </select>
+                </div>
+
+                <!-- Filtre : Prix maximum -->
+                <div class="mb-4">
+                    <p style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px;">Prix maximum</p>
+                    <div style="display:flex;gap:8px;align-items:center;">
+                        <input type="number" placeholder="€ Max" class="form-control-omnes" style="flex:1;">
+                        <button class="btn-primary-omnes" style="padding:8px 14px;border-radius:8px;"><i class="bi bi-check"></i></button>
+                    </div>
+                </div>
+
+                <!-- Filtre : Tri -->
+                <div class="mb-3">
+                    <p style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px;">Trier par</p>
+                    <select class="form-select-omnes">
+                        <option>Plus récents</option>
+                        <option>Prix croissant</option>
+                        <option>Prix décroissant</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!--  GRILLE DES ARTICLES  -->
+        <div class="col-lg-9">
+
+            <!-- Barre de recherche + compteur de résultats -->
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+                <div class="input-group" style="max-width:380px;">
+                    <span class="input-group-text" style="background:white;border:1.5px solid #e0ecec;border-right:none;border-radius:10px 0 0 10px;">
+                        <i class="bi bi-search" style="color:var(--primary);"></i>
+                    </span>
+                    <input type="text" class="form-control" style="border:1.5px solid #e0ecec;border-left:none;border-radius:0 10px 10px 0;font-size:.875rem;" placeholder="Rechercher...">
+                </div>
+                <span style="color:var(--text-muted);font-size:.875rem;">24 résultats</span>
+            </div>
+
+            <!-- Grille des articles — remplie dynamiquement par JS -->
+            <div class="row g-3" id="articlesGrid"></div>
+
+            <!-- Pagination -->
+            <nav class="mt-5 d-flex justify-content-center">
+                <ul class="pagination" style="gap:6px;">
+                    <li class="page-item">
+                        <a class="page-link" style="border-radius:8px;border-color:#e0ecec;color:var(--primary);" href="#">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link" style="border-radius:8px;background:var(--primary);border-color:var(--primary);" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" style="border-radius:8px;border-color:#e0ecec;color:var(--primary);" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" style="border-radius:8px;border-color:#e0ecec;color:var(--primary);" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" style="border-radius:8px;border-color:#e0ecec;color:var(--primary);" href="#">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- 
+     SCRIPT : Génération dynamique des cartes articles
+     Utilise ARTICLES_DB depuis js/articles-data.js.
+     Chaque lien inclut ?id=X pour la fiche dynamique.
+ -->
+<script src="js/articles-data.js"></script>
+<script>
+/* Libellés des modes de vente */
+const modeLabels = { immediat:' Direct', negotiation:' Négo', enchere:' Enchère' };
+/* Libellés des types d'article */
+const typeLabels  = { haute_gamme:' Luxe', rare:' Rare', regulier:'Régulier' };
+/* Libellés des boutons CTA selon le mode */
+const ctaLabels   = { immediat:'Acheter', negotiation:'Négocier', enchere:'Enchérir' };
+
+const grid = document.getElementById('articlesGrid');
+
+/* On utilise directement ARTICLES_DB importée depuis articles-data.js */
+ARTICLES_DB.forEach((a, i) => {
+    const [c1, c2] = a.couleurFond;
+
+    /**
+     * IMAGE : Si a.img est renseigné → <img> réelle.
+     * Sinon → placeholder coloré avec nom + icône caméra.
+     * Pour ajouter une vraie photo : renseigner a.img dans articles-data.js
+     */
+    const imageHTML = a.img
+        ? `<img src="${a.img}" alt="${a.nom}" style="width:100%;height:200px;object-fit:cover;">`
+        : `<div style="height:200px;background:linear-gradient(135deg,${c1},${c2});display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px;">
+               <i class="bi bi-camera" style="font-size:1.8rem;color:rgba(255,255,255,.4);"></i>
+               <span style="color:rgba(255,255,255,.75);font-size:.78rem;font-weight:600;text-align:center;line-height:1.3;">${a.nom}</span>
+               <span style="color:rgba(255,255,255,.4);font-size:.68rem;">${a.cat}</span>
+           </div>`;
+
+    /* Lien vers la fiche avec l'id de l'article : article-detail.html?id=X */
+    const detailUrl = `article-detail.html?id=${a.id}`;
+
+    grid.innerHTML += `
+    <div class="col-sm-6 col-xl-4 fade-in stagger-${(i % 4) + 1}">
+        <div class="card-omnes h-100">
+            <!-- Clic sur l'image → fiche de CET article -->
+            <a href="${detailUrl}" style="text-decoration:none;display:block;overflow:hidden;border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
+                ${imageHTML}
+            </a>
+            <div class="p-3 d-flex flex-column h-100">
+                <!-- Badges mode + type -->
+                <div class="d-flex gap-2 mb-2 flex-wrap">
+                    <span class="mode-badge badge-${a.mode}">${modeLabels[a.mode]}</span>
+                    <span class="mode-badge badge-${a.type}">${typeLabels[a.type]}</span>
+                </div>
+                <!-- Clic sur le titre → fiche de CET article -->
+                <a href="${detailUrl}" style="text-decoration:none;color:var(--text);flex-grow:1;">
+                    <h6 style="font-weight:600;font-size:.9rem;line-height:1.4;margin-bottom:4px;">${a.nom}</h6>
+                    <p style="color:var(--text-muted);font-size:.78rem;margin-bottom:8px;">
+                        ${a.cat} · <i class="bi bi-person"></i> ${a.vendeurPseudo}
+                    </p>
+                </a>
+                <!-- Prix + bouton CTA → fiche de CET article -->
+                <div class="d-flex justify-content-between align-items-center mt-auto">
+                    <span class="price-display price-sm">${a.prixAffiche}</span>
+                    <a href="${detailUrl}" class="btn btn-sm btn-primary-omnes" style="padding:6px 14px;font-size:.8rem;">
+                        ${ctaLabels[a.mode]}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>`;
+});
+</script>
+
+<!-- Footer partagé -->
+<script>renderFooter();</script>
+</body>
+</html>

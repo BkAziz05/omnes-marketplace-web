@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- 
+         notifications.html — Centre de notifications
+         Affiche les notifications de l'utilisateur
+         et permet de créer des alertes de recherche.
+     -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications — Omnes MarketPlace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar partagée — actif : 'notifications' -->
+<script src="js/layout.js"></script>
+<script>renderNavbar('notifications');</script>
+
+<!-- Bandeau de page -->
+<div class="page-hero">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mt-2">
+            <!-- Titre avec badge du nombre de notifications non lues -->
+            <h1 class="mb-0">
+                <i class="bi bi-bell me-2"></i>Notifications
+                <span style="font-size:.6em;background:var(--accent);color:#333;padding:2px 10px;border-radius:50px;vertical-align:middle;">3</span>
+            </h1>
+            <!-- Bouton "tout marquer comme lu" -->
+            <button onclick="markAll()" class="btn" style="background:rgba(255,255,255,.2);color:white;border-radius:50px;font-size:.85rem;">
+                <i class="bi bi-check-all me-1"></i>Tout marquer lu
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+
+        <!--  LISTE DES NOTIFICATIONS  -->
+        <div class="col-lg-7">
+            <h5 style="font-family:'Playfair Display',serif;margin-bottom:20px;">Mes notifications</h5>
+            <!-- Remplie dynamiquement par JS -->
+            <div id="notifList"></div>
+        </div>
+
+        <!--  SYSTÈME D'ALERTES  -->
+        <div class="col-lg-5">
+            <h5 style="font-family:'Playfair Display',serif;margin-bottom:20px;">
+                <i class="bi bi-search me-2" style="color:var(--primary);"></i>Mes alertes
+            </h5>
+
+            <!-- Formulaire de création d'alerte -->
+            <div class="card-omnes p-4 mb-3">
+                <h6 style="font-weight:700;margin-bottom:16px;">Créer une alerte</h6>
+                <!-- Mots-clés de recherche -->
+                <div class="mb-3">
+                    <label class="form-label-omnes">Mots-clés</label>
+                    <input type="text" class="form-control-omnes" placeholder="Ex: bijou or montre">
+                </div>
+                <!-- Prix maximum pour l'alerte -->
+                <div class="mb-3">
+                    <label class="form-label-omnes">Prix max (€)</label>
+                    <input type="number" class="form-control-omnes" placeholder="Illimité">
+                </div>
+                <!-- Filtre sur le mode de vente -->
+                <div class="mb-3">
+                    <label class="form-label-omnes">Mode de vente</label>
+                    <select class="form-select-omnes">
+                        <option>Tous les modes</option>
+                        <option>Achat immédiat</option>
+                        <option>Négociation</option>
+                        <option>Enchère</option>
+                    </select>
+                </div>
+                <!-- Bouton créer l'alerte -->
+                <button onclick="addAlert()" class="btn-primary-omnes btn w-100">
+                    <i class="bi bi-plus-circle me-2"></i>Créer l'alerte
+                </button>
+            </div>
+
+            <!-- Alertes existantes — remplies par JS -->
+            <div id="alertList"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 
+     SCRIPTS : Génération des notifications et alertes
+ -->
+<script>
+/**
+ * Données de notifications de l'utilisateur.
+ * Types : enchere | negociation | commande | alerte | systeme
+ * unread:true = notification non lue (affichée en gras + point bleu)
+ */
+const notifs = [
+    {
+        type:  'enchere',
+        icon:  'bi-trophy',
+        color: '#c62828',
+        bg:    '#fce4ec',
+        msg:   'Vous avez été surenchéri sur "Bague or 18 carats". Nouvelle offre : 330 €',
+        time:  'Il y a 5 min',
+        unread: true,
+    },
+    {
+        type:  'negociation',
+        icon:  'bi-chat-dots',
+        color: '#e65100',
+        bg:    '#fff3e0',
+        msg:   'Le vendeur Marc Martin a répondu à votre négociation : contre-offre à 165 €',
+        time:  'Il y a 1h',
+        unread: true,
+    },
+    {
+        type:  'commande',
+        icon:  'bi-bag-check',
+        color: '#2e7d32',
+        bg:    '#e8f5e9',
+        msg:   'Votre commande #42 a été expédiée. Livraison estimée : 3-5 jours ouvrés.',
+        time:  'Il y a 3h',
+        unread: true,
+    },
+    {
+        type:  'alerte',
+        icon:  'bi-bell',
+        color: '#1565c0',
+        bg:    '#e3f2fd',
+        msg:   'Nouvel article correspondant à votre alerte "veste cuir" : Veste en cuir vintage à 180 €',
+        time:  'Hier 14:30',
+        unread: false,
+    },
+    {
+        type:  'systeme',
+        icon:  'bi-gear',
+        color: '#555',
+        bg:    '#f5f5f5',
+        msg:   'Bienvenue sur Omnes MarketPlace ! Votre compte a été créé avec succès.',
+        time:  '08/03/2026',
+        unread: false,
+    },
+];
+
+/* Génération des cartes de notification */
+const notifList = document.getElementById('notifList');
+notifs.forEach(n => {
+    notifList.innerHTML += `
+    <div class="card-omnes p-3 mb-2 d-flex align-items-start gap-3 ${n.unread ? '' : 'opacity-75'} fade-in">
+        <!-- Icône colorée selon le type -->
+        <div style="width:40px;height:40px;background:${n.bg};border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="bi ${n.icon}" style="color:${n.color};"></i>
+        </div>
+        <div class="flex-grow-1">
+            <!-- Texte de la notification -->
+            <p style="margin:0;font-size:.875rem;${n.unread ? 'font-weight:600;' : ''}">${n.msg}</p>
+            <small style="color:var(--text-muted);">${n.time}</small>
+        </div>
+        <!-- Point bleu = non lue -->
+        ${n.unread ? '<span style="width:8px;height:8px;background:var(--primary);border-radius:50%;flex-shrink:0;margin-top:6px;"></span>' : ''}
+    </div>`;
+});
+
+/**
+ * Alertes actives de l'utilisateur.
+ * Chaque alerte déclenche une notification quand un article correspond.
+ */
+const alerts = [
+    {mots:'veste cuir', prixMax:'200 €', mode:'Tous'},
+    {mots:'bijoux or',  prixMax:'500 €', mode:'Enchère'},
+];
+
+/* Génération des cartes d'alerte */
+const alertList = document.getElementById('alertList');
+alerts.forEach(a => {
+    alertList.innerHTML += `
+    <div class="card-omnes p-3 mb-2 d-flex align-items-center gap-3">
+        <i class="bi bi-bell-fill" style="color:var(--primary);font-size:1.1rem;"></i>
+        <div class="flex-grow-1">
+            <div style="font-weight:600;font-size:.875rem;">"${a.mots}"</div>
+            <small style="color:var(--text-muted);">Max ${a.prixMax} · ${a.mode}</small>
+        </div>
+        <!-- Bouton supprimer l'alerte -->
+        <button onclick="this.closest('.card-omnes').remove()" style="background:none;border:none;color:#ef5350;padding:0;cursor:pointer;" title="Supprimer l'alerte">
+            <i class="bi bi-trash"></i>
+        </button>
+    </div>`;
+});
+
+/**
+ * markAll() — Marque toutes les notifications comme lues.
+ * Retire le gras et les points bleus de toutes les notifs.
+ * En production : appeler PATCH /api/notifications/read-all
+ */
+function markAll() {
+    document.querySelectorAll('#notifList .card-omnes p[style*="font-weight:600"]')
+        .forEach(el => el.style.fontWeight = '400');
+    document.querySelectorAll('#notifList span[style*="background:var(--primary)"]')
+        .forEach(el => el.remove());
+}
+
+/**
+ * addAlert() — Crée une nouvelle alerte de recherche.
+ * En production : appeler POST /api/alerts avec les critères.
+ */
+function addAlert() {
+    alert('Alerte créée avec succès !');
+}
+</script>
+
+<!-- Footer partagé -->
+<script>renderFooter();</script>
+</body>
+</html>

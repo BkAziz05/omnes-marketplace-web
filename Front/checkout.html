@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- 
+         checkout.html — Page de finalisation de commande
+         Étapes : Panier → Livraison → Paiement → Confirmation
+         Formulaire adresse + informations bancaires.
+     -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement — Omnes MarketPlace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar partagée -->
+<script src="js/layout.js"></script>
+<script>renderNavbar('');</script>
+
+<!-- Bandeau de page -->
+<div class="page-hero">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="background:none;padding:0;margin:0;">
+                <li class="breadcrumb-item"><a href="cart.html" style="color:rgba(255,255,255,.7);text-decoration:none;">Panier</a></li>
+                <li class="breadcrumb-item active" style="color:white;">Paiement</li>
+            </ol>
+        </nav>
+        <h1 class="mt-2">Finaliser la commande</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+
+    <!-- 
+         INDICATEUR D'ÉTAPES
+         4 étapes : Panier → Livraison → Paiement → Confirmation
+     -->
+    <div class="d-flex justify-content-center mb-5 gap-0">
+        <!-- Étape 1 : Panier (complétée) -->
+        <div class="d-flex align-items-center">
+            <div class="d-flex flex-column align-items-center" style="min-width:80px;">
+                <div style="width:36px;height:36px;border-radius:50%;background:var(--primary-pale);color:var(--primary-dark);display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;">
+                    <i class="bi bi-check"></i>
+                </div>
+                <span style="font-size:.72rem;margin-top:4px;color:#aaa;">Panier</span>
+            </div>
+            <div style="width:60px;height:2px;background:var(--primary);margin-bottom:20px;"></div>
+        </div>
+
+        <!-- Étape 2 : Livraison (active) -->
+        <div class="d-flex align-items-center">
+            <div class="d-flex flex-column align-items-center" style="min-width:80px;">
+                <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;border:2px solid var(--primary);">2</div>
+                <span style="font-size:.72rem;margin-top:4px;color:var(--primary);font-weight:700;">Livraison</span>
+            </div>
+            <div style="width:60px;height:2px;background:var(--gray-100);margin-bottom:20px;"></div>
+        </div>
+
+        <!-- Étape 3 : Paiement (à venir) -->
+        <div class="d-flex align-items-center">
+            <div class="d-flex flex-column align-items-center" style="min-width:80px;">
+                <div style="width:36px;height:36px;border-radius:50%;background:var(--gray-100);color:#aaa;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;">3</div>
+                <span style="font-size:.72rem;margin-top:4px;color:#aaa;">Paiement</span>
+            </div>
+            <div style="width:60px;height:2px;background:var(--gray-100);margin-bottom:20px;"></div>
+        </div>
+
+        <!-- Étape 4 : Confirmation (à venir) -->
+        <div class="d-flex align-items-center">
+            <div class="d-flex flex-column align-items-center" style="min-width:80px;">
+                <div style="width:36px;height:36px;border-radius:50%;background:var(--gray-100);color:#aaa;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;">4</div>
+                <span style="font-size:.72rem;margin-top:4px;color:#aaa;">Confirmation</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <!--  FORMULAIRES LIVRAISON + PAIEMENT  -->
+        <div class="col-lg-8">
+
+            <!-- Adresse de livraison -->
+            <div class="card-omnes p-4 mb-4">
+                <h5 style="font-family:'Playfair Display',serif;margin-bottom:20px;">
+                    <i class="bi bi-truck me-2" style="color:var(--primary);"></i>Adresse de livraison
+                </h5>
+                <div class="row g-3">
+                    <div class="col-6"><label class="form-label-omnes">Prénom *</label><input type="text" class="form-control-omnes" value="Alice"></div>
+                    <div class="col-6"><label class="form-label-omnes">Nom *</label><input type="text" class="form-control-omnes" value="Dubois"></div>
+                    <div class="col-12"><label class="form-label-omnes">Adresse *</label><input type="text" class="form-control-omnes" value="15 Rue des Lilas"></div>
+                    <div class="col-12"><label class="form-label-omnes">Complément</label><input type="text" class="form-control-omnes" placeholder="Apt, bâtiment..."></div>
+                    <div class="col-4"><label class="form-label-omnes">Code postal *</label><input type="text" class="form-control-omnes" value="75011"></div>
+                    <div class="col-8"><label class="form-label-omnes">Ville *</label><input type="text" class="form-control-omnes" value="Paris"></div>
+                    <div class="col-6"><label class="form-label-omnes">Pays *</label><input type="text" class="form-control-omnes" value="France"></div>
+                    <div class="col-6"><label class="form-label-omnes">Téléphone</label><input type="tel" class="form-control-omnes" value="+33 6 12 34 56 78"></div>
+                </div>
+            </div>
+
+            <!-- Informations de paiement -->
+            <div class="card-omnes p-4">
+                <h5 style="font-family:'Playfair Display',serif;margin-bottom:20px;">
+                    <i class="bi bi-credit-card me-2" style="color:var(--primary);"></i>Informations de paiement
+                </h5>
+
+                <!-- Sélection du type de carte -->
+                <div class="mb-3">
+                    <label class="form-label-omnes">Type de carte *</label>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <label style="cursor:pointer;">
+                            <div onclick="selectCard(this,'visa')" style="padding:8px 18px;border:2px solid var(--primary);border-radius:8px;font-weight:700;font-size:.8rem;background:var(--primary-pale);color:var(--primary-dark);">VISA</div>
+                        </label>
+                        <label style="cursor:pointer;">
+                            <div onclick="selectCard(this,'mc')" style="padding:8px 18px;border:2px solid var(--border);border-radius:8px;font-weight:700;font-size:.8rem;">MC</div>
+                        </label>
+                        <label style="cursor:pointer;">
+                            <div onclick="selectCard(this,'amex')" style="padding:8px 18px;border:2px solid var(--border);border-radius:8px;font-weight:700;font-size:.8rem;">AMEX</div>
+                        </label>
+                        <label style="cursor:pointer;">
+                            <div onclick="selectCard(this,'paypal')" style="padding:8px 18px;border:2px solid var(--border);border-radius:8px;font-weight:700;font-size:.8rem;">PayPal</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Numéro de carte (formatage automatique) -->
+                <div class="mb-3">
+                    <label class="form-label-omnes">Numéro de carte *</label>
+                    <input type="text" class="form-control-omnes" placeholder="1234 5678 9012 3456" oninput="formatCard(this)">
+                </div>
+                <!-- Nom sur la carte -->
+                <div class="mb-3">
+                    <label class="form-label-omnes">Nom sur la carte *</label>
+                    <input type="text" class="form-control-omnes" placeholder="ALICE DUBOIS" style="text-transform:uppercase;">
+                </div>
+                <!-- Expiration + CVV -->
+                <div class="row g-3">
+                    <div class="col-6">
+                        <label class="form-label-omnes">Expiration *</label>
+                        <input type="text" class="form-control-omnes" placeholder="MM/YYYY" oninput="formatExp(this)">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label-omnes">CVV *</label>
+                        <input type="password" class="form-control-omnes" placeholder="•••" maxlength="4">
+                    </div>
+                </div>
+                <!-- Mention chiffrement -->
+                <div class="mt-3 d-flex align-items-center gap-2" style="font-size:.8rem;color:var(--text-muted);">
+                    <i class="bi bi-lock-fill" style="color:var(--primary);"></i>Données bancaires chiffrées et sécurisées.
+                </div>
+            </div>
+        </div>
+
+        <!--  RÉCAP COMMANDE  -->
+        <div class="col-lg-4">
+            <div class="card-omnes p-4 position-sticky" style="top:90px;">
+                <h5 style="font-family:'Playfair Display',serif;margin-bottom:16px;">Ma commande</h5>
+
+                <!-- Article 1 -->
+                <!-- PLACEHOLDER — Remplacer par <img src="images/veste-cuir.jpg"> -->
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div style="width:44px;height:44px;background:linear-gradient(135deg,#2d1b00,#8b4513);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i class="bi bi-camera" style="color:rgba(255,255,255,.5);font-size:.7rem;"></i>
+                    </div>
+                    <div>
+                        <div style="font-size:.825rem;font-weight:600;">Veste en cuir vintage</div>
+                        <div style="font-size:.75rem;color:var(--text-muted);">180 €</div>
+                    </div>
+                </div>
+
+                <!-- Article 2 -->
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div style="width:44px;height:44px;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i class="bi bi-camera" style="color:rgba(255,255,255,.5);font-size:.7rem;"></i>
+                    </div>
+                    <div>
+                        <div style="font-size:.825rem;font-weight:600;">MacBook Pro 2021</div>
+                        <div style="font-size:.75rem;color:var(--text-muted);">1 200 €</div>
+                    </div>
+                </div>
+
+                <!-- Article 3 -->
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div style="width:44px;height:44px;background:linear-gradient(135deg,#1a2e1a,#2e7d32);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i class="bi bi-camera" style="color:rgba(255,255,255,.5);font-size:.7rem;"></i>
+                    </div>
+                    <div>
+                        <div style="font-size:.825rem;font-weight:600;">Collection Harry Potter</div>
+                        <div style="font-size:.75rem;color:var(--text-muted);">45 €</div>
+                    </div>
+                </div>
+
+                <hr style="border-color:var(--border);">
+                <div class="d-flex justify-content-between mb-1" style="font-size:.875rem;"><span style="color:var(--text-muted);">Sous-total</span><span>1 425 €</span></div>
+                <div class="d-flex justify-content-between mb-3" style="font-size:.875rem;"><span style="color:var(--text-muted);">Livraison</span><span style="color:#4caf50;font-weight:600;">Gratuite</span></div>
+                <div class="d-flex justify-content-between mb-4"><strong>Total</strong><strong class="price-display" style="font-size:1.15rem;">1 425 €</strong></div>
+
+                <!-- Bouton confirmer et payer -->
+                <a href="account.html" class="btn-accent btn w-100 py-3 text-center" style="font-size:.95rem;border-radius:var(--radius);text-decoration:none;display:block;">
+                    <i class="bi bi-check-circle me-2"></i>Confirmer & Payer
+                </a>
+                <p style="font-size:.72rem;color:var(--text-muted);text-align:center;margin-top:12px;">En cliquant, vous vous engagez légalement à payer.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+/**
+ * selectCard(el) — Sélection visuelle du type de carte.
+ * Réinitialise tous les boutons puis met en valeur celui cliqué.
+ */
+function selectCard(el) {
+    document.querySelectorAll('[onclick^="selectCard"]').forEach(b => {
+        b.style.borderColor = 'var(--border)';
+        b.style.background  = 'white';
+        b.style.color       = 'var(--text)';
+    });
+    el.style.borderColor = 'var(--primary)';
+    el.style.background  = 'var(--primary-pale)';
+    el.style.color       = 'var(--primary-dark)';
+}
+
+/**
+ * formatCard(el) — Formate le numéro de carte en groupes de 4 chiffres.
+ * Ex : "1234567890123456" → "1234 5678 9012 3456"
+ */
+function formatCard(el) {
+    el.value = el.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim().slice(0, 19);
+}
+
+/**
+ * formatExp(el) — Formate la date d'expiration en MM/YYYY.
+ * Ex : "032026" → "03/2026"
+ */
+function formatExp(el) {
+    let v = el.value.replace(/\D/g, '');
+    if (v.length >= 2) v = v.slice(0, 2) + '/' + v.slice(2, 6);
+    el.value = v;
+}
+</script>
+
+<!-- Footer partagé -->
+<script>renderFooter();</script>
+</body>
+</html>

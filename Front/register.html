@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- 
+         register.html — Page d'inscription
+         Formulaire de création de compte avec :
+         - Infos personnelles (prénom, nom, email)
+         - Mot de passe avec indicateur de force
+         - Adresse de livraison + téléphone
+         - Clause d'engagement légal obligatoire
+     -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription — Omnes MarketPlace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /*  Variables CSS  */
+        :root {
+            --primary:      #0e8c8c;
+            --primary-dark: #0a6e6e;
+            --accent:       #f7a800;
+        }
+
+        /*  Corps centré sur fond dégradé  */
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        /*  Carte d'inscription  */
+        .card {
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 32px 80px rgba(10,70,70,.35);
+            border: none;
+            width: 100%;
+            max-width: 540px;
+        }
+
+        /*  En-tête de la carte  */
+        .register-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 30px 40px;
+            text-align: center;
+        }
+        .register-header h1 {
+            font-family: 'Playfair Display', serif;
+            color: white;
+            font-size: 1.6rem;
+            margin: 10px 0 4px;
+        }
+        .register-header p {
+            color: rgba(255,255,255,.75);
+            font-size: .875rem;
+            margin: 0;
+        }
+
+        /*  Corps du formulaire  */
+        .register-body { padding: 32px 40px 36px; }
+
+        /*  Champs de formulaire  */
+        .fc {
+            border: 1.5px solid #e0ecec;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: .88rem;
+            width: 100%;
+            font-family: 'DM Sans', sans-serif;
+            transition: border-color .2s;
+        }
+        .fc:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(14,140,140,.12);
+            outline: none;
+        }
+
+        /*  Labels de champ  */
+        .fl {
+            font-size: .78rem;
+            font-weight: 700;
+            color: #5a7a7a;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        /*  Bouton d'inscription  */
+        .btn-register {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 13px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: .95rem;
+            transition: all .2s;
+            cursor: pointer;
+        }
+        .btn-register:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        /*  Barre indicateur de force du mot de passe  */
+        .pass-bar {
+            height: 4px;
+            border-radius: 2px;
+            margin-top: 6px;
+            background: #eee;
+            overflow: hidden;
+        }
+        .pass-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: all .3s;
+            width: 0;
+        }
+
+        /*  Encart clause légale  */
+        .clause-box {
+            background: #f0f9f9;
+            border: 1.5px solid #c8e6e6;
+            border-radius: 10px;
+            padding: 14px 16px;
+            font-size: .85rem;
+            color: #3a6060;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 
+     CARTE D'INSCRIPTION
+     Page isolée sans navbar/footer.
+ -->
+<div class="card">
+
+    <!-- En-tête avec logo texte stylisé -->
+    <div class="register-header">
+        <!-- Logo texte "OmnesMarketPlace" version register -->
+        <div style="display:flex;align-items:center;justify-content:center;margin-bottom:8px;">
+            <span style="font-family:'Playfair Display',serif;font-weight:700;font-size:1.5rem;color:white;letter-spacing:-0.5px;">Omnes</span>
+            <span style="font-family:'DM Sans',sans-serif;font-weight:300;font-size:1.1rem;color:rgba(255,255,255,.7);letter-spacing:1px;text-transform:uppercase;margin-left:5px;">MarketPlace</span>
+        </div>
+        <h1>Créer un compte</h1>
+        <p>Rejoignez la communauté Omnes MarketPlace</p>
+    </div>
+
+    <div class="register-body">
+
+        <!-- Prénom + Nom côte à côte -->
+        <div class="row g-3 mb-3">
+            <div class="col-6">
+                <label class="fl">Prénom *</label>
+                <input type="text" class="fc" placeholder="Alice">
+            </div>
+            <div class="col-6">
+                <label class="fl">Nom *</label>
+                <input type="text" class="fc" placeholder="Dupont">
+            </div>
+        </div>
+
+        <!-- Email de connexion -->
+        <div class="mb-3">
+            <label class="fl">Adresse email *</label>
+            <input type="email" class="fc" placeholder="alice.dupont@email.fr">
+        </div>
+
+        <!-- Mot de passe avec indicateur de force + confirmation -->
+        <div class="row g-3 mb-3">
+            <div class="col-6">
+                <label class="fl">Mot de passe *</label>
+                <!-- oninput déclenche checkStrength() pour évaluer la robustesse -->
+                <input type="password" class="fc" id="passInput" placeholder="••••••••" oninput="checkStrength(this.value)">
+                <!-- Barre colorée de force du mot de passe -->
+                <div class="pass-bar">
+                    <div class="pass-bar-fill" id="passBar"></div>
+                </div>
+                <!-- Texte indicatif (critères ou niveau) -->
+                <small id="passHint" style="font-size:.72rem;color:#aaa;">8 car., 1 maj., 1 chiffre, 1 spécial</small>
+            </div>
+            <div class="col-6">
+                <label class="fl">Confirmer *</label>
+                <input type="password" class="fc" placeholder="••••••••">
+            </div>
+        </div>
+
+        <!-- Adresse de livraison -->
+        <div class="mb-3">
+            <label class="fl">Adresse de livraison</label>
+            <textarea class="fc" rows="2" placeholder="10 Rue de la Paix, 75001 Paris"></textarea>
+        </div>
+
+        <!-- Numéro de téléphone -->
+        <div class="mb-4">
+            <label class="fl">Téléphone</label>
+            <input type="tel" class="fc" placeholder="+33 6 12 34 56 78">
+        </div>
+
+        <!--  CLAUSE D'ENGAGEMENT LÉGAL  -->
+        <!-- Obligatoire : l'utilisateur doit cocher avant de créer son compte -->
+        <div class="clause-box mb-4">
+            <label class="d-flex gap-3 align-items-start" style="cursor:pointer;">
+                <input type="checkbox" class="mt-1 flex-shrink-0" style="width:16px;height:16px;accent-color:var(--primary);">
+                <span>
+                    <strong>Engagement légal :</strong>
+                    J'accepte que toute offre que je fais sur un article me place sous contrat légal pour l'acheter si le vendeur accepte mon offre.
+                </span>
+            </label>
+        </div>
+
+        <!-- Bouton de création de compte — redirige vers l'accueil en démo -->
+        <button class="btn-register" onclick="window.location='index.html'">
+            Créer mon compte <i class="bi bi-arrow-right ms-2"></i>
+        </button>
+
+        <!-- Lien connexion + retour accueil -->
+        <div class="text-center mt-4">
+            <p style="color:#888;font-size:.875rem;margin:0;">Déjà un compte ?
+                <a href="login.html" style="color:var(--primary);font-weight:600;text-decoration:none;">Se connecter</a>
+            </p>
+            <a href="index.html" style="color:#aaa;font-size:.8rem;text-decoration:none;display:block;margin-top:8px;">
+                <i class="bi bi-arrow-left me-1"></i>Retour à l'accueil
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+/**
+ * checkStrength(val) — Évalue la force du mot de passe en temps réel.
+ * Critères : longueur ≥8, 1 majuscule, 1 chiffre, 1 caractère spécial.
+ * Mise à jour visuelle : barre colorée + texte indicatif.
+ *
+ * @param {string} val - Valeur actuelle du champ mot de passe
+ */
+function checkStrength(val) {
+    let score = 0;
+    if (val.length >= 8)             score++; // Longueur suffisante
+    if (/[A-Z]/.test(val))           score++; // Majuscule présente
+    if (/[0-9]/.test(val))           score++; // Chiffre présent
+    if (/[^a-zA-Z0-9]/.test(val))   score++; // Caractère spécial présent
+
+    const bar    = document.getElementById('passBar');
+    const hint   = document.getElementById('passHint');
+
+    /* Couleurs selon le score : rouge → orange → jaune → vert */
+    const colors = ['#ef5350','#ff9800','#ffc107','#4caf50'];
+    const labels = ['Trop faible','Faible','Moyen','Fort '];
+
+    bar.style.width      = (score * 25) + '%';
+    bar.style.background = colors[score - 1] || '#eee';
+    if (val.length > 0) hint.textContent = labels[score - 1] || '';
+}
+</script>
+</body>
+</html>

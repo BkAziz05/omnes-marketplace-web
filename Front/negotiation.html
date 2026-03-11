@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- 
+         negotiation.html — Interface de négociation
+         Fil de discussion acheteur/vendeur avec offres
+         et contre-offres (max 5 tours).
+     -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Négociation — Omnes MarketPlace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar partagée -->
+<script src="js/layout.js"></script>
+<script>renderNavbar('');</script>
+
+<!-- Bandeau de page avec titre et contexte -->
+<div class="page-hero">
+    <div class="container">
+        <h1 class="mt-2"><i class="bi bi-chat-dots me-2"></i>Négociation</h1>
+        <!-- Sous-titre : nom de l'article + tour actuel -->
+        <p style="color:rgba(255,255,255,.8);">Veste en cuir vintage · Tour 2/5</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <!-- 
+                 ARTICLE EN NÉGOCIATION
+                 Bannière résumant l'article concerné.
+             -->
+            <div class="card-omnes p-3 mb-4 d-flex align-items-center gap-3" style="background:var(--primary-pale);">
+                <!-- PLACEHOLDER IMAGE — Remplacer par <img src="images/veste-cuir.jpg" ...> -->
+                <div style="width:60px;height:60px;background:linear-gradient(135deg,#2d1b00,#8b4513);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;flex-shrink:0;">
+                    <i class="bi bi-camera" style="color:rgba(255,255,255,.5);font-size:.9rem;"></i>
+                    <span style="color:rgba(255,255,255,.5);font-size:.45rem;text-align:center;">Veste cuir</span>
+                </div>
+                <div class="flex-grow-1">
+                    <div style="font-weight:700;">Veste en cuir vintage</div>
+                    <div style="font-size:.8rem;color:var(--text-muted);">Prix vendeur : 180 € · Vendeur : Marc Martin</div>
+                </div>
+                <!-- Badge statut de la négociation -->
+                <span style="background:#e3f2fd;color:#1565c0;padding:4px 12px;border-radius:50px;font-size:.8rem;font-weight:700;">En cours</span>
+            </div>
+
+            <!-- 
+                 FIL DE DISCUSSION
+                 Messages alternés : acheteur (droite) / vendeur (gauche)
+             -->
+            <div class="mb-4 d-flex flex-column gap-3" style="max-height:400px;overflow-y:auto;padding:4px 0;">
+
+                <!-- Offre de l'acheteur (bulle droite, fond primaire) -->
+                <div class="d-flex justify-content-end">
+                    <div style="max-width:70%;background:var(--primary);color:white;border-radius:18px 18px 4px 18px;padding:14px 18px;box-shadow:var(--shadow-sm);">
+                        <div style="font-size:.75rem;opacity:.7;margin-bottom:4px;">Vous · 08/03/2026 14:30</div>
+                        <!-- Montant proposé -->
+                        <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;">150 €</div>
+                        <div style="font-size:.75rem;margin-top:4px;opacity:.8;">En attente</div>
+                    </div>
+                </div>
+
+                <!-- Contre-offre du vendeur (bulle gauche, fond blanc) -->
+                <div class="d-flex justify-content-start">
+                    <div style="max-width:70%;background:white;color:var(--text);border-radius:18px 18px 18px 4px;padding:14px 18px;box-shadow:var(--shadow-sm);">
+                        <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:4px;">Vendeur · 08/03/2026 15:10</div>
+                        <!-- Montant contre-proposé -->
+                        <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;">165 €</div>
+                        <div style="font-size:.75rem;margin-top:4px;color:var(--text-muted);">Contre-offre</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+                 ACTIONS DE RÉPONSE
+                 Accepter / Refuser / Contre-offre
+             -->
+            <div class="card-omnes p-4">
+                <h6 style="font-weight:700;margin-bottom:16px;">Votre réponse</h6>
+
+                <!-- Boutons Accepter / Refuser -->
+                <div class="d-flex gap-2 mb-3 flex-wrap">
+                    <!-- Accepter l'offre actuelle du vendeur (165€) -->
+                    <button onclick="acceptOffer()" class="btn" style="background:#e8f5e9;color:#2e7d32;border:none;border-radius:50px;padding:10px 20px;font-weight:700;">
+                        <i class="bi bi-check-circle me-2"></i>Accepter 165 €
+                    </button>
+                    <!-- Refuser sans contre-offre -->
+                    <button class="btn" style="background:#fce8e8;color:#c62828;border:none;border-radius:50px;padding:10px 20px;font-weight:700;">
+                        <i class="bi bi-x-circle me-2"></i>Refuser
+                    </button>
+                </div>
+
+                <!-- Champ de contre-offre libre -->
+                <div class="input-group">
+                    <span class="input-group-text" style="background:white;border:1.5px solid var(--border);">€</span>
+                    <input type="number" class="form-control form-control-omnes" placeholder="Votre contre-offre..." style="border-left:none;" id="counterInput">
+                    <button onclick="sendCounter()" class="btn btn-primary-omnes" style="border-radius:0 var(--radius-sm) var(--radius-sm) 0;">
+                        <i class="bi bi-reply me-1"></i>Contre-offre
+                    </button>
+                </div>
+                <!-- Info : tours restants -->
+                <small style="color:var(--text-muted);font-size:.75rem;margin-top:8px;display:block;">
+                    Tour 2/5 — Il vous reste 3 tours de négociation
+                </small>
+            </div>
+
+            <!-- Lien retour liste des négociations -->
+            <div class="mt-4 text-center">
+                <a href="articles.html" style="color:var(--primary);font-size:.875rem;text-decoration:none;">
+                    <i class="bi bi-arrow-left me-1"></i>Toutes mes négociations
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 
+     MODALE DE SUCCÈS
+     Affichée quand l'acheteur accepte l'offre.
+     Redirection automatique vers le panier après 3s.
+ -->
+<div id="successModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:white;border-radius:24px;padding:40px;text-align:center;max-width:400px;width:90%;box-shadow:0 32px 80px rgba(0,0,0,.3);">
+        <div style="font-size:4rem;margin-bottom:16px;"></div>
+        <h3 style="font-family:'Playfair Display',serif;margin-bottom:8px;">Accord conclu !</h3>
+        <p style="color:var(--text-muted);margin-bottom:24px;">Vous avez accepté l'offre à <strong>165 €</strong>. Cet achat est désormais un engagement légal.</p>
+        <a href="cart.html" class="btn-primary-omnes btn px-4">Procéder au paiement</a>
+    </div>
+</div>
+
+<script>
+/**
+ * acceptOffer() — L'acheteur accepte la dernière contre-offre du vendeur.
+ * Affiche la modale de succès, puis redirige vers le panier après 3s.
+ * En production : appeler POST /api/negotiations/{id}/accept
+ */
+function acceptOffer() {
+    const modal = document.getElementById('successModal');
+    modal.style.display = 'flex';
+    setTimeout(() => {
+        modal.style.display = 'none';
+        window.location = 'cart.html';
+    }, 3000);
+}
+
+/**
+ * sendCounter() — Envoie une contre-offre de l'acheteur au vendeur.
+ * En production : appeler POST /api/negotiations/{id}/counter avec le montant.
+ */
+function sendCounter() {
+    const value = document.getElementById('counterInput').value;
+    if (!value) return;
+    alert('Contre-offre de ' + value + ' € envoyée !');
+}
+</script>
+
+<!-- Footer partagé -->
+<script>renderFooter();</script>
+</body>
+</html>

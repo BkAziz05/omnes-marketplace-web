@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- 
+         article-detail.html — Fiche produit dynamique
+         Lit l'identifiant du produit dans l'URL : ?id=X
+         et affiche les données correspondantes.
+         Ex : article-detail.html?id=1  → Veste en cuir
+              article-detail.html?id=2  → MacBook Pro
+     -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Le titre sera mis à jour dynamiquement par JS -->
+    <title>Article — Omnes MarketPlace</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar partagée -->
+<script src="js/layout.js"></script>
+<!-- Base de données des articles (partagée avec articles.html) -->
+<script src="js/articles-data.js"></script>
+<script>renderNavbar('articles');</script>
+
+<!-- 
+     BANDEAU DE PAGE — mis à jour dynamiquement
+ -->
+<div class="page-hero py-4">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="background:none;padding:0;margin:0;">
+                <li class="breadcrumb-item"><a href="index.html" style="color:rgba(255,255,255,.7);text-decoration:none;">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="articles.html" style="color:rgba(255,255,255,.7);text-decoration:none;">Tout Parcourir</a></li>
+                <!-- Nom de l'article injecté dynamiquement par JS -->
+                <li class="breadcrumb-item active" style="color:white;" id="breadcrumbTitle">Chargement...</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- 
+     CONTENU PRINCIPAL — injecté par JS
+ -->
+<div class="container py-5" id="mainContent">
+    <!-- Spinner de chargement initial -->
+    <div class="text-center py-5">
+        <div class="spinner-border" style="color:var(--primary);" role="status"></div>
+        <p style="color:var(--text-muted);margin-top:16px;">Chargement de l'article...</p>
+    </div>
+</div>
+
+<!-- 
+     PAGE 404 — affichée si l'article n'existe pas
+ -->
+<div class="container py-5 text-center" id="notFoundContent" style="display:none;">
+    <div style="font-size:4rem;margin-bottom:16px;"></div>
+    <h2 style="font-family:'Playfair Display',serif;margin-bottom:12px;">Article introuvable</h2>
+    <p style="color:var(--text-muted);margin-bottom:24px;">Cet article n'existe pas ou a été supprimé.</p>
+    <a href="articles.html" class="btn-primary-omnes btn px-4">
+        <i class="bi bi-arrow-left me-2"></i>Retour au catalogue
+    </a>
+</div>
+
+<script>
+/**
+ * 
+ * SCRIPT PRINCIPAL — Fiche produit dynamique
+ *
+ * Fonctionnement :
+ * 1. Lit le paramètre "id" dans l'URL (?id=X)
+ * 2. Cherche l'article dans ARTICLES_DB (articles-data.js)
+ * 3. Injecte tout le HTML de la page selon les données trouvées
+ * 4. Si article non trouvé → affiche la page 404
+ * 
+ */
+
+/*  Étape 1 : Récupération de l'id dans l'URL  */
+const params    = new URLSearchParams(window.location.search);
+const articleId = params.get('id');
+
+/*  Étape 2 : Recherche dans la base de données  */
+const article = getArticleById(articleId);
+
+if (!article) {
+    /* Article non trouvé → affichage de la page 404 */
+    document.getElementById('mainContent').style.display     = 'none';
+    document.getElementById('notFoundContent').style.display = 'block';
+    document.getElementById('breadcrumbTitle').textContent    = 'Introuvable';
+
+} else {
+    /*  Article trouvé → construction de la page  */
+
+    /* Mise à jour du titre de l'onglet */
+    document.title = article.nom + ' — Omnes MarketPlace';
+
+    /* Mise à jour du fil d'Ariane */
+    document.getElementById('breadcrumbTitle').textContent = article.nom;
+
+    /**
+     * buildImageHTML(height, label)
+     * Génère le HTML d'une image ou d'un placeholder.
+     * Si article.img est renseigné → <img> réelle
+     * Sinon → bloc coloré avec nom + icône caméra
+     */
+    function buildImageHTML(height, label) {
+        if (article.img) {
+            return `<img src="${article.img}" alt="${article.nom}"
+                         style="width:100%;height:${height};object-fit:cover;">`;
+        }
+        const [c1, c2] = article.couleurFond;
+        return `<div style="height:${height};background:linear-gradient(135deg,${c1},${c2});
+                    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;">
+                    <i class="bi bi-camera" style="font-size:2.5rem;color:rgba(255,255,255,.4);"></i>
+                    <span style="color:rgba(255,255,255,.75);font-size:.9rem;font-weight:600;text-align:center;line-height:1.3;">${label}</span>
+                    <span style="color:rgba(255,255,255,.4);font-size:.72rem;">${article.cat}</span>
+                </div>`;
+    }
+
+    /*  Badges de mode et type  */
+    const modeBadgeMap = {
+        immediat:    { label:' Achat immédiat',             cls:'badge-immediat'    },
+        negotiation: { label:' Négociation vendeur-client', cls:'badge-negotiation' },
+        enchere:     { label:' Enchère',                    cls:'badge-enchere'     },
+    };
+    const typeBadgeMap = {
+        haute_gamme: { label:' Haute gamme', cls:'badge-haute_gamme' },
+        rare:        { label:' Article rare', cls:'badge-rare'       },
+        regulier:    { label:' Régulier',     cls:'badge-regulier'   },
+    };
+    const modeBadge = modeBadgeMap[article.mode] || { label: article.mode, cls: '' };
+    const typeBadge = typeBadgeMap[article.type] || { label: article.type, cls: '' };
+
+    /**
+     * buildCTA()
+     * Génère le bloc d'action selon le mode de vente :
+     * - immediat    → bouton "Ajouter au panier"
+     * - negotiation → formulaire d'offre → negotiation.html
+     * - enchere     → bouton → auction.html
+     */
+    function buildCTA() {
+        if (article.mode === 'immediat') {
+            return `
+            <div class="card-omnes p-4">
+                <h6 style="font-weight:700;margin-bottom:6px;">Achat immédiat</h6>
+                <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:16px;">
+                    Cliquez pour ajouter cet article à votre panier et procéder au paiement.
+                </p>
+                <a href="cart.html" class="btn btn-primary-omnes w-100 py-3"
+                   style="font-size:.95rem;border-radius:var(--radius);text-decoration:none;display:block;text-align:center;">
+                    <i class="bi bi-bag-plus me-2"></i>Ajouter au panier — ${article.prixAffiche}
+                </a>
+            </div>`;
+        }
+        if (article.mode === 'negotiation') {
+            return `
+            <div class="card-omnes p-4">
+                <h6 style="font-weight:700;margin-bottom:6px;">Faire une offre</h6>
+                <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:16px;">
+                    Proposez votre prix. Vous pouvez négocier jusqu'à 5 tours. Toute offre acceptée est un engagement d'achat.
+                </p>
+                <div class="input-group mb-2">
+                    <span class="input-group-text" style="background:white;border:1.5px solid var(--border);">€</span>
+                    <input type="number" class="form-control form-control-omnes"
+                           placeholder="Votre offre (ex: ${Math.round(article.prix * 0.85)})"
+                           id="offerInput" style="border-left:none;">
+                    <button onclick="goToNegotiation()" class="btn btn-primary-omnes"
+                            style="border-radius:0 var(--radius-sm) var(--radius-sm) 0;">Proposer</button>
+                </div>
+                <small style="color:var(--text-muted);font-size:.8rem;">
+                    <i class="bi bi-info-circle me-1"></i>Tour 1/5
+                </small>
+            </div>`;
+        }
+        if (article.mode === 'enchere') {
+            return `
+            <div class="card-omnes p-4">
+                <h6 style="font-weight:700;margin-bottom:6px;">Participer à l'enchère</h6>
+                <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:16px;">
+                    Placez votre offre maximum. Le système enchérira automatiquement pour vous.
+                </p>
+                <a href="auction.html?id=${article.id}" class="btn btn-accent w-100 py-3"
+                   style="font-size:.95rem;border-radius:var(--radius);text-decoration:none;display:block;text-align:center;font-weight:700;">
+                    <i class="bi bi-trophy me-2"></i>Voir l'enchère et enchérir
+                </a>
+            </div>`;
+        }
+        return '';
+    }
+
+    /*  Étape 3 : Injection du HTML complet  */
+    document.getElementById('mainContent').innerHTML = `
+    <div class="row g-5">
+
+        <!--  GALERIE PHOTOS  -->
+        <div class="col-lg-6">
+            <div id="photoCarousel" class="carousel slide" data-bs-ride="false">
+                <div class="carousel-inner" style="border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-lg);">
+                    <div class="carousel-item active">
+                        ${buildImageHTML('420px', article.nom)}
+                    </div>
+                    <div class="carousel-item">
+                        ${buildImageHTML('420px', article.nom + ' — Détail')}
+                    </div>
+                    <div class="carousel-item">
+                        ${buildImageHTML('420px', article.nom + ' — Vue 3')}
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#photoCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#photoCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+
+            <!-- Miniatures -->
+            <div class="d-flex gap-2 mt-3">
+                ${[0,1,2].map(i => `
+                <div style="width:64px;height:64px;border-radius:8px;border:2px solid ${i===0?'var(--primary)':'transparent'};
+                            overflow:hidden;cursor:pointer;${i>0?'opacity:.6':''};"
+                     onclick="jumpToSlide(${i})" id="thumb-${i}">
+                    ${buildImageHTML('64px', '')}
+                </div>`).join('')}
+            </div>
+        </div>
+
+        <!--  INFORMATIONS PRODUIT  -->
+        <div class="col-lg-6">
+
+            <!-- Badges mode + type -->
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <span class="mode-badge ${modeBadge.cls}" style="font-size:.8rem;padding:6px 14px;">${modeBadge.label}</span>
+                <span class="mode-badge ${typeBadge.cls}" style="font-size:.8rem;padding:6px 14px;">${typeBadge.label}</span>
+            </div>
+
+            <!-- Titre -->
+            <h1 style="font-size:1.9rem;line-height:1.3;margin-bottom:12px;">${article.nom}</h1>
+
+            <!-- Métadonnées -->
+            <p style="color:var(--text-muted);font-size:.875rem;margin-bottom:20px;">
+                <i class="bi bi-tag me-1"></i>${article.cat}
+                &nbsp;·&nbsp;
+                <i class="bi bi-person me-1"></i>Vendu par <strong>${article.vendeur}</strong>
+                &nbsp;·&nbsp;
+                <i class="bi bi-calendar me-1"></i>${article.date}
+            </p>
+
+            <!-- Prix -->
+            <div style="background:var(--gray-50);border-radius:var(--radius);padding:20px 24px;margin-bottom:24px;">
+                <div style="font-size:.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">
+                    ${article.mode === 'negotiation' ? 'Prix vendeur (négociable)' :
+                      article.mode === 'enchere'     ? 'Prix de départ' : 'Prix'}
+                </div>
+                <div class="price-display price-lg">${article.prixAffiche}</div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                <h6 style="font-weight:700;font-size:.85rem;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">Description</h6>
+                <p style="color:var(--text-muted);font-size:.9rem;line-height:1.7;">${article.description}</p>
+            </div>
+
+            <!-- Défauts -->
+            ${article.defauts === 'Aucun défaut apparent.' || article.defauts === 'Aucun défaut notable.'
+                ? `<div class="mb-4" style="background:#e8f5e9;border-radius:var(--radius-sm);padding:14px 16px;border-left:4px solid #4caf50;">
+                       <h6 style="font-weight:700;color:#2e7d32;margin-bottom:0;font-size:.82rem;">
+                           <i class="bi bi-check-circle me-2"></i>${article.defauts}
+                       </h6>
+                   </div>`
+                : `<div class="mb-4" style="background:#fff8e1;border-radius:var(--radius-sm);padding:14px 16px;border-left:4px solid var(--accent);">
+                       <h6 style="font-weight:700;color:#856404;margin-bottom:6px;font-size:.82rem;">
+                           <i class="bi bi-exclamation-triangle me-2"></i>Défauts signalés
+                       </h6>
+                       <p style="color:#856404;font-size:.875rem;margin:0;">${article.defauts}</p>
+                   </div>`
+            }
+
+            <!-- CTA selon le mode -->
+            ${buildCTA()}
+        </div>
+    </div>`;
+}
+
+/**
+ * jumpToSlide(index) — Navigation manuelle vers une slide du carrousel.
+ * Met à jour la bordure de la miniature active.
+ */
+function jumpToSlide(index) {
+    const carousel = bootstrap.Carousel.getOrCreateInstance(document.getElementById('photoCarousel'));
+    carousel.to(index);
+    [0,1,2].forEach(i => {
+        const t = document.getElementById('thumb-' + i);
+        if (t) {
+            t.style.borderColor = (i === index) ? 'var(--primary)' : 'transparent';
+            t.style.opacity     = (i === index) ? '1' : '0.6';
+        }
+    });
+}
+
+/**
+ * goToNegotiation() — Redirige vers negotiation.html avec l'id + l'offre.
+ * Ex : negotiation.html?id=1&offer=150
+ */
+function goToNegotiation() {
+    const offer = document.getElementById('offerInput')?.value;
+    if (!offer) { alert('Veuillez saisir un montant.'); return; }
+    window.location = `negotiation.html?id=${article?.id}&offer=${offer}`;
+}
+</script>
+
+<!-- Footer partagé -->
+<script>renderFooter();</script>
+</body>
+</html>

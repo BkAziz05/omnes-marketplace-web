@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- 
+         cart.html — Panier d'achat
+         Affiche les articles dans le panier, le sous-total
+         et permet de passer à la commande (checkout).
+     -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Panier — Omnes MarketPlace</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Styles globaux -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar partagée — actif : 'cart' -->
+<script src="js/layout.js"></script>
+<script>renderNavbar('cart');</script>
+
+<!-- Bandeau de page -->
+<div class="page-hero">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="background:none;padding:0;margin:0;">
+                <li class="breadcrumb-item"><a href="index.html" style="color:rgba(255,255,255,.7);text-decoration:none;">Accueil</a></li>
+                <li class="breadcrumb-item active" style="color:white;">Mon Panier</li>
+            </ol>
+        </nav>
+        <h1 class="mt-2">Mon Panier</h1>
+        <p style="color:rgba(255,255,255,.8);">3 articles</p>
+    </div>
+</div>
+
+<!-- 
+     CONTENU PRINCIPAL
+     Colonne gauche : liste des articles
+     Colonne droite : récapitulatif et bouton commande
+ -->
+<div class="container py-5">
+    <div class="row g-4">
+
+        <!--  LISTE DES ARTICLES  -->
+        <div class="col-lg-8">
+
+            <!-- Article 1 : Veste en cuir vintage -->
+            <div class="card-omnes p-4 mb-3 d-flex gap-4 align-items-center fade-in">
+                <!-- PLACEHOLDER IMAGE — Remplacer par :
+                     <img src="images/veste-cuir-vintage.jpg" alt="Veste en cuir vintage"
+                          style="width:80px;height:80px;object-fit:cover;border-radius:var(--radius-sm);flex-shrink:0;">
+                -->
+                <div style="width:80px;height:80px;background:linear-gradient(135deg,#1a0d00,#8b4513);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex-shrink:0;">
+                    <i class="bi bi-camera" style="font-size:1rem;color:rgba(255,255,255,.5);"></i>
+                    <span style="color:rgba(255,255,255,.6);font-size:.55rem;text-align:center;line-height:1.2;padding:0 4px;">Veste cuir</span>
+                </div>
+                <div class="flex-grow-1">
+                    <h6 style="font-weight:600;margin-bottom:4px;">Veste en cuir vintage</h6>
+                    <span class="mode-badge badge-negotiation" style="font-size:.72rem;"> Négociation</span>
+                    <p style="color:var(--text-muted);font-size:.78rem;margin-top:4px;">Vendu par Marc Martin</p>
+                </div>
+                <div class="text-end">
+                    <div class="price-display price-sm">180 €</div>
+                    <button style="background:none;border:none;color:#ef5350;font-size:.8rem;margin-top:6px;cursor:pointer;">
+                        <i class="bi bi-trash me-1"></i>Retirer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Article 2 : MacBook Pro -->
+            <div class="card-omnes p-4 mb-3 d-flex gap-4 align-items-center fade-in stagger-1">
+                <!-- PLACEHOLDER IMAGE — Remplacer par <img src="images/macbook-pro-2021.jpg" ...> -->
+                <div style="width:80px;height:80px;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex-shrink:0;">
+                    <i class="bi bi-camera" style="font-size:1rem;color:rgba(255,255,255,.5);"></i>
+                    <span style="color:rgba(255,255,255,.6);font-size:.55rem;text-align:center;line-height:1.2;padding:0 4px;">MacBook Pro</span>
+                </div>
+                <div class="flex-grow-1">
+                    <h6 style="font-weight:600;margin-bottom:4px;">MacBook Pro 2021</h6>
+                    <span class="mode-badge badge-immediat" style="font-size:.72rem;"> Achat direct</span>
+                    <p style="color:var(--text-muted);font-size:.78rem;margin-top:4px;">Vendu par Sophie Leclerc</p>
+                </div>
+                <div class="text-end">
+                    <div class="price-display price-sm">1 200 €</div>
+                    <button style="background:none;border:none;color:#ef5350;font-size:.8rem;margin-top:6px;cursor:pointer;">
+                        <i class="bi bi-trash me-1"></i>Retirer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Article 3 : Collection Harry Potter -->
+            <div class="card-omnes p-4 mb-3 d-flex gap-4 align-items-center fade-in stagger-2">
+                <!-- PLACEHOLDER IMAGE — Remplacer par <img src="images/collection-harry-potter.jpg" ...> -->
+                <div style="width:80px;height:80px;background:linear-gradient(135deg,#1a2e1a,#2e7d32);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex-shrink:0;">
+                    <i class="bi bi-camera" style="font-size:1rem;color:rgba(255,255,255,.5);"></i>
+                    <span style="color:rgba(255,255,255,.6);font-size:.55rem;text-align:center;line-height:1.2;padding:0 4px;">Harry Potter</span>
+                </div>
+                <div class="flex-grow-1">
+                    <h6 style="font-weight:600;margin-bottom:4px;">Collection Harry Potter</h6>
+                    <span class="mode-badge badge-immediat" style="font-size:.72rem;"> Achat direct</span>
+                    <p style="color:var(--text-muted);font-size:.78rem;margin-top:4px;">Vendu par Thomas Bernard</p>
+                </div>
+                <div class="text-end">
+                    <div class="price-display price-sm">45 €</div>
+                    <button style="background:none;border:none;color:#ef5350;font-size:.8rem;margin-top:6px;cursor:pointer;">
+                        <i class="bi bi-trash me-1"></i>Retirer
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!--  RÉCAPITULATIF COMMANDE  -->
+        <div class="col-lg-4">
+            <div class="card-omnes p-4 position-sticky" style="top:90px;">
+                <h5 style="font-family:'Playfair Display',serif;margin-bottom:20px;">Récapitulatif</h5>
+
+                <!-- Détail des montants -->
+                <div class="d-flex justify-content-between mb-2" style="font-size:.875rem;">
+                    <span style="color:var(--text-muted);">Sous-total (3 articles)</span>
+                    <span>1 425 €</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2" style="font-size:.875rem;">
+                    <span style="color:var(--text-muted);">Livraison</span>
+                    <span style="color:#4caf50;font-weight:600;">Gratuite</span>
+                </div>
+
+                <hr style="border-color:var(--border);">
+
+                <!-- Total final -->
+                <div class="d-flex justify-content-between mb-4">
+                    <strong>Total</strong>
+                    <strong class="price-display" style="font-size:1.2rem;">1 425 €</strong>
+                </div>
+
+                <!-- CTA : passer à la commande -->
+                <a href="checkout.html" class="btn-primary-omnes btn w-100 py-3 mb-3 text-center" style="font-size:.95rem;border-radius:var(--radius);text-decoration:none;display:block;">
+                    <i class="bi bi-credit-card me-2"></i>Passer à la commande
+                </a>
+
+                <!-- Lien retour catalogue -->
+                <a href="articles.html" class="btn w-100 text-center" style="background:var(--gray-100);color:var(--text-muted);border-radius:var(--radius);padding:10px;text-decoration:none;display:block;">
+                    <i class="bi bi-arrow-left me-2"></i>Continuer mes achats
+                </a>
+
+                <!-- Mention sécurité paiement -->
+                <div class="mt-4 d-flex align-items-center gap-2" style="font-size:.78rem;color:var(--text-muted);">
+                    <i class="bi bi-shield-check" style="color:var(--primary);font-size:1rem;"></i>Paiement 100% sécurisé
+                </div>
+                <!-- Logos moyens de paiement acceptés -->
+                <div class="d-flex gap-2 mt-2">
+                    <span style="background:var(--gray-100);border-radius:4px;padding:3px 8px;font-size:.7rem;font-weight:700;color:var(--gray-600);">VISA</span>
+                    <span style="background:var(--gray-100);border-radius:4px;padding:3px 8px;font-size:.7rem;font-weight:700;color:var(--gray-600);">MC</span>
+                    <span style="background:var(--gray-100);border-radius:4px;padding:3px 8px;font-size:.7rem;font-weight:700;color:var(--gray-600);">PAYPAL</span>
+                    <span style="background:var(--gray-100);border-radius:4px;padding:3px 8px;font-size:.7rem;font-weight:700;color:var(--gray-600);">AMEX</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer partagé -->
+<script>renderFooter();</script>
+</body>
+</html>
